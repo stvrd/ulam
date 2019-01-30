@@ -4,18 +4,19 @@ library(tidyverse)
 library(magrittr)
 # Prime numbers
 
-GivePrimes <- function(end,start=1){
+GivePrimes <- function(end,start=1,verbose=F){
   nn <- 1:end
   primes <- vector(length = end-start+1)
   for (i in nn[start:end]) {
+    if(verbose) {if(i%%1000==0) cat(i," ")}
     if (i==2) primes[i] <- {TRUE
     } else if (min(i %% nn[2:(i-1)]) != 0) { primes[i] <- TRUE }
   }
   primes
 }
 
-GivePrimes(end=11)
-pr <- GivePrimes(1e4) 
+GivePrimes(50)
+pr <- GivePrimes(1e4,verbose = T) 
 length(which(pr))
 
 create.ulam <- function(n=5,boolean=F) {
@@ -25,13 +26,14 @@ create.ulam <- function(n=5,boolean=F) {
   dir <- c("r","u","l","d")
   n.rep <- rep(1:n,each=2)
   dirs <- dir %>% rep(length.out=length(n.rep)) %>% rep(n.rep)
+  ulam[x,y] <- -1 
+
   if(boolean) {
-    vec <- GivePrimes(end=n^2)
-    ulam[x,y] <- vec[1] 
-  } else {ulam[x,y] <- 1} 
+    print("Calculating Prime Numbers ...")
+    vec <- GivePrimes(end=n^2,verbose=T)
+  } 
   
   for(i in 1:n^2) {
-    if(i%%10==0) print(i)
     if         (dirs[i]=="r") { y <- y+1
     }  else if (dirs[i]=="u") { x <- x-1
     }  else if (dirs[i]=="l") { y <- y-1
@@ -44,7 +46,6 @@ create.ulam <- function(n=5,boolean=F) {
 }
 
 u <- create.ulam(n = 200,boolean = T)
-image(u)
-
-
+image(u,axes=F,col=c("black","white","blue"))
+title("Ulam Spiral")
 
