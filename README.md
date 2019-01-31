@@ -1,3 +1,5 @@
-# ulam
+# Create Ulam Spirals
 
-Function to create Ulam Spirals
+![Ulam Spiral](ulam.png)
+
+![Frequency](freq.png)
