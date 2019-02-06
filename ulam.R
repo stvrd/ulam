@@ -1,7 +1,9 @@
+# Prime numbers ------
 system.time()
 library(magrittr)
-# Prime numbers
 
+
+# ------------- Naive Approach ------------------------------------------
 GivePrimes <- function(end,start=1,verbose=F){
   nn <- 1:end
   primes <- vector(length = end-start+1)
@@ -17,7 +19,29 @@ GivePrimes(50)
 pr <- GivePrimes(1e4,verbose = T) 
 
 
-#  ----- 2nd approach ----------------------
+#  ----- Sieve of Erastosthenes ----------------------
+
+int main()
+{
+  int num;
+  cin >> num;
+  // num % 2 computes the remainder when num is divided by 2
+  if ( num % 2 == 0 )
+  {
+    cout << num << " is even ";
+  }
+  
+  return 0;
+}
+
+cppFunction('double sumC(NumericVector x) {
+  int n = x.size();
+  double total = 0;
+  for(int i = 0; i < n; ++i) {
+    total += x[i];
+  }
+  return total;
+}')
 
 create.matrix <- function(vec) {
   n <- sqrt(length(vec))
@@ -43,7 +67,7 @@ create.matrix <- function(vec) {
 
 ulam <- function(n,plot=F) {
   par(mar=c(2,1,2,1), mgp=c(0.4,0,0))
-  vec <- rep(TRUE,length = n^2)
+  vec <- rep(TRUE,length = n)
   vec[1:2] <- c(F,T)
   for(i in 2:n){
     if(!plot & i %% 100 == 0) print(i)
@@ -69,13 +93,14 @@ ulam <- function(n,plot=F) {
 }
 
 ulam(100)
-ulam(100,plot=T)
+ulam(20,plot=T)
 
 which(ulam(1e3))
 
 # -------- Frequency of Primes: --------------------
-n <- 1e3
+n <- 1e4
 pr <- ulam(n)
+length(which(pr))
 freq <- vector(length = n)
 x <- 1:n*n
 for(i in x){
@@ -87,3 +112,16 @@ for(i in x){
 plot(x,1/log(x),lty=2,lwd=2,type="l",col="blue",xlab="",ylab="")
 points(x,freq,type="p",pch=16,cex=0.5)
 title("Frequency of Prime Numbers")
+
+
+# ---------- Fermat primality test -------
+
+np <- which(!pr)[2:50]
+a <- 2:10
+
+fermat <- outer(X = a,Y = np-1, FUN="^")
+f2 <- apply(fermat,2, FUN = mod(np))
+f2 == 1
+
+
+a^(np-1) %% np
