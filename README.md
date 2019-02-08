@@ -5,7 +5,7 @@
 
 
 
-![Ulam Spiral](ulam.png)
+![Ulam Spiral](ulam.gif)
 
 ![Frequency](freq.png)
 

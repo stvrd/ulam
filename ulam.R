@@ -21,27 +21,6 @@ pr <- GivePrimes(1e4,verbose = T)
 
 #  ----- Sieve of Erastosthenes ----------------------
 
-int main()
-{
-  int num;
-  cin >> num;
-  // num % 2 computes the remainder when num is divided by 2
-  if ( num % 2 == 0 )
-  {
-    cout << num << " is even ";
-  }
-  
-  return 0;
-}
-
-cppFunction('double sumC(NumericVector x) {
-  int n = x.size();
-  double total = 0;
-  for(int i = 0; i < n; ++i) {
-    total += x[i];
-  }
-  return total;
-}')
 
 create.matrix <- function(vec) {
   n <- sqrt(length(vec))
@@ -97,31 +76,63 @@ ulam(20,plot=T)
 
 which(ulam(1e3))
 
+# ------ save GIF ----------------
+library(animation)
+
+saveGIF({
+  ani.options(nmax = 500)
+  ulam(500,plot=T)
+}, interval = 0.2, movie.name = 'ulam.gif', ani.width = 800, ani.height = 600)
+
+
 # -------- Frequency of Primes: --------------------
-n <- 1e4
+n <- 2e3
 pr <- ulam(n)
 length(which(pr))
 freq <- vector(length = n)
 x <- 1:n*n
 for(i in x){
   if(i %% 1e5==0) print(i)
-  freq[i/1000] <- length(which(pr[1:i]))/i
+  freq[i/n] <- length(which(pr[1:i]))/i
 }
-
 
 plot(x,1/log(x),lty=2,lwd=2,type="l",col="blue",xlab="",ylab="")
 points(x,freq,type="p",pch=16,cex=0.5)
 title("Frequency of Prime Numbers")
 
 
-# ---------- Fermat primality test -------
+# ---------- Fermat primality test --------
+# a^(np-1) %% np == 1
 
-np <- which(!pr)[2:50]
-a <- 2:10
+fpt <- function(a,np) a^(np-1) %% np
+fpt(2,8:11)
+np <- which(!pr)[2:10]
+a <- 2:5
 
-fermat <- outer(X = a,Y = np-1, FUN="^")
-f2 <- apply(fermat,2, FUN = mod(np))
-f2 == 1
+sapply(2:5,function(x) fpt(x,1:23))
+# Prime numbers have fpt==1. However, we spot some fermat liars
 
+# --------- Using Rccp --------------------
+# TODO
 
-a^(np-1) %% np
+cppFunction('int main() {
+            int num;
+            cin >> num;
+            // num % 2 computes the remainder when num is divided by 2
+            if ( num % 2 == 0 )
+            {
+              cout << num << " is even ";
+            }
+            
+            return 0;
+          }')
+
+cppFunction('double sumC(NumericVector x) {
+            int n = x.size();
+            double total = 0;
+            for(int i = 0; i < n; ++i) {
+            total += x[i];
+            }
+            return total;
+            }')
+
