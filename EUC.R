@@ -2,7 +2,7 @@
 
 library(tidyverse)
 
-EUC_step <- function(s_i=c(0,0)){
+EUC <- function(s_i=c(0,0)){
   # input s_i = state and input values
   # output res = state, output and direction values
   if(all(s_i == c(0   ,0)))    return(c(0,0,"R"))
@@ -31,27 +31,29 @@ EUC_step <- function(s_i=c(0,0)){
 }
 EUC(c(0,0))
 
-tape <- (c(0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,0,0,0,0))
 
-EUC <- function(tape, sleep=F){
+UTM <- function(tape, sleep=F){
   i <- 1
   ret <- c(0,tape[i],"R")
   steps <- 0
   while(TRUE){
     steps <- steps+1
-    ret <- EUC_step(c(ret[1],tape[i]))
+    ret <- EUC(c(ret[1],tape[i]))
     tape[i] <- as.numeric(ret[2])
+    cat(c("\r", tape[1:(i-1)], paste0("[", tape[i], "]"), tape[(i+1):length(tape)],collapse = ""))
     if(ret[3]=="R") i <- i+1
     if(ret[3]=="L") i <- i-1
     if(ret[3]=="STOP") break()
     # print(paste("state =",ret[1]))
     # print(paste("input =",ret[2]))
     # print(paste("i = ", i))
-    cat(c("\r",tape))
     if(sleep) Sys.sleep(sleep)
   }
   cat("\n Steps = ", steps)
   
 }
 
-EUC(tape)
+tape <- (c(0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,0,0,0,0))
+tape <- (c(0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,0,0,0,0))
+UTM(tape,sleep = 0.5)
+
