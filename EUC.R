@@ -57,3 +57,27 @@ tape <- (c(0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,0,0
 tape <- (c(0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,0,0,0,0))
 UTM(tape,sleep = 0.5)
 
+
+# Decimal 2 binary and binary 2 decimal
+
+D2B <- function(x){
+  pow <- 2^(floor(log(x,base = 2)):0)
+  binary <- vector(length = length(pow))
+  binary[1] <- 1
+  for(i in 2:length(pow)) {
+    # i <- i+1
+    interm <- x-sum(pow*binary)
+    if(interm>=pow[i]) binary[i] <- 1
+  }
+  as.numeric(paste(binary,collapse = ""))
+}
+
+B2D <- function(x){
+  x <- as.numeric(strsplit(as.character(x), "")[[1]])
+  if(any(x>1)) stop("x not binary")
+  pow <- 2^((length(x)-1):0)
+  sum(x*pow)
+}
+  
+D2B(9)
+B2D(1001)
